@@ -1,0 +1,65 @@
+.
+├── backend
+│   ├── althea
+│   │   ├── __init__.py
+│   │   ├── __pycache__
+│   │   │   ├── __init__.cpython-312.pyc
+│   │   │   ├── settings.cpython-312.pyc
+│   │   │   ├── urls.cpython-312.pyc
+│   │   │   └── wsgi.cpython-312.pyc
+│   │   ├── asgi.py
+│   │   ├── settings.py
+│   │   ├── urls.py
+│   │   └── wsgi.py
+│   ├── altheaapp
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── apps.py
+│   │   ├── migrations
+│   │   │   └── __init__.py
+│   │   ├── models.py
+│   │   ├── tests.py
+│   │   └── views.py
+│   ├── db.sqlite3
+│   └── manage.py
+├── CLAUDE.md
+├── frontend
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── public
+│   │   └── vite.svg
+│   ├── README.md
+│   ├── src
+│   │   ├── App.css
+│   │   ├── App.jsx
+│   │   ├── assets
+│   │   │   └── react.svg
+│   │   ├── components
+│   │   │   ├── layout
+│   │   │   │   ├── Footer.jsx
+│   │   │   │   └── Navigation.jsx
+│   │   │   ├── sections
+│   │   │   │   ├── Benefits.jsx
+│   │   │   │   ├── CTA.jsx
+│   │   │   │   ├── FAQ.jsx
+│   │   │   │   ├── Hero.jsx
+│   │   │   │   ├── HowItWorks.jsx
+│   │   │   │   └── Testimonials.jsx
+│   │   │   └── ui
+│   │   │       ├── Badge.jsx
+│   │   │       ├── Button.jsx
+│   │   │       └── Card.jsx
+│   │   ├── data
+│   │   │   └── content.js
+│   │   ├── index.css
+│   │   └── main.jsx
+│   └── vite.config.js
+├── main.py
+├── project-structure.txt
+├── pyproject.toml
+├── README.md
+└── uv.lock
+
+15 directories, 48 files

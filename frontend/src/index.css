@@ -1,0 +1,28 @@
+@import "tailwindcss"; 
+
+
+/* Add this to your existing src/index.css file */
+
+/* Floating Animation for Background Elements */
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg); 
+  }
+  50% { 
+    transform: translateY(-20px) rotate(180deg); 
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Custom shadow variations for enhanced depth */
+.shadow-3xl {
+  box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Enhance existing hover transitions */
+.group:hover .group-hover\:shadow-xl {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
