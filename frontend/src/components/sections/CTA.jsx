@@ -8,7 +8,7 @@ import {
   CheckCircle,
   Sparkles
 } from 'lucide-react';
-import Button from '../ui/button';
+import Button from '../ui/Button';
 
 const CTA = () => {
   return (
