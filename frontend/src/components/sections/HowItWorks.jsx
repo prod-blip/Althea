@@ -5,7 +5,7 @@ import {
   Heart 
 } from 'lucide-react';
 import { steps } from '../../data/content';
-import Button from '../ui/button';
+import Button from '../ui/Button';
 
 // Icon mapping for dynamic rendering
 const iconMap = {
