@@ -1,0 +1,6 @@
+Django==5.2.6
+gunicorn==21.2.0
+whitenoise==6.5.0
+psycopg2-binary==2.9.7  # only if using Postgres
+dj-database-url==1.0.0  # optional, if using DATABASE_URL
+python-dotenv==1.1.0
