@@ -30,7 +30,9 @@ SECRET_KEY = 'django-insecure-z+@g(y+@0*e)1seo&wq!4o9n9yye%qa8xb9t-p6!$fr0a_w$j#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["althea-1.onrender.com",
+    "localhost",
+    "127.0.0.1",]
 
 
 # Application definition
