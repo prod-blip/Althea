@@ -31,9 +31,28 @@ def health_check(request):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
+def test_auth_endpoint(request):
+    """Test endpoint to verify POST requests work without authentication"""
+    return Response({
+        'status': 'success',
+        'message': 'POST request received successfully',
+        'data_received': request.data
+    })
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
 def google_auth(request):
     """Handle Google OAuth authentication"""
     try:
+        # Add debugging to see what's happening
+        print(f"=== GOOGLE AUTH DEBUG ===")
+        print(f"Request method: {request.method}")
+        print(f"Request headers: {dict(request.headers)}")
+        print(f"Request data: {request.data}")
+        print(f"Request content type: {request.content_type}")
+        print(f"User authenticated: {request.user.is_authenticated}")
+        print(f"=== END GOOGLE AUTH DEBUG ===")
+
         token = request.data.get('token')
         if not token:
             return Response({'error': 'No token provided'}, status=400)

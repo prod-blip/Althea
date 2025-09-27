@@ -21,6 +21,7 @@ from altheaapp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/health/', views.health_check, name='health_check'),
+    path('api/test-auth/', views.test_auth_endpoint, name='test_auth'),
     path('api/auth/google/', views.google_auth, name='google_auth'),
     path('api/auth/logout/', views.logout_user, name='logout'),
     path('api/user/profile/', views.user_profile, name='user_profile'),
