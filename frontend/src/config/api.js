@@ -17,6 +17,15 @@ export const apiRequest = async (endpoint, options = {}) => {
   const savedTokens = localStorage.getItem('authTokens');
   const tokens = savedTokens ? JSON.parse(savedTokens) : null;
 
+  // Debug token information
+  console.log('=== API REQUEST DEBUG ===');
+  console.log('Endpoint:', endpoint);
+  console.log('Tokens from localStorage:', tokens);
+  console.log('Access token exists:', !!tokens?.access);
+  if (tokens?.access) {
+    console.log('Access token preview:', tokens.access.substring(0, 50) + '...');
+  }
+
   const config = {
     credentials: 'include', // Include cookies for Django session auth
     ...options,
@@ -26,6 +35,9 @@ export const apiRequest = async (endpoint, options = {}) => {
       ...options.headers,
     },
   };
+
+  console.log('Request headers:', config.headers);
+  console.log('=== END API DEBUG ===');
 
   try {
     const response = await fetch(url, config);

@@ -66,6 +66,11 @@ def google_auth(request):
             access_token = str(refresh.access_token)
             refresh_token = str(refresh)
 
+            print(f"=== JWT TOKEN GENERATION ===")
+            print(f"Generated access token: {access_token[:50]}...")
+            print(f"Generated refresh token: {refresh_token[:50]}...")
+            print(f"=== END TOKEN DEBUG ===")
+
             return Response({
                 'success': True,
                 'user': {
@@ -113,10 +118,15 @@ def user_profile(request):
 def analyze_medical_report(request):
     """Analyze medical report using OpenAI"""
     try:
-        # Debug authentication
+        # Debug authentication and headers
+        print(f"=== AUTHENTICATION DEBUG ===")
         print(f"User authenticated: {request.user.is_authenticated}")
         print(f"User: {request.user}")
         print(f"Session key: {request.session.session_key}")
+        print(f"Request headers: {dict(request.headers)}")
+        auth_header = request.headers.get('Authorization', 'No Authorization header')
+        print(f"Authorization header: {auth_header}")
+        print(f"=== END DEBUG ===")
 
         if not request.user.is_authenticated:
             return Response({
