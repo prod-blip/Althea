@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Heart, AlertCircle } from 'lucide-react';
-import Button from '../ui/Button';
+import ButtonComponent from '../ui/ButtonComponent';
 import { apiRequest } from '../../config/api';
 
 const SignInModal = ({ isOpen, onClose, onSuccess }) => {

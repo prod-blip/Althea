@@ -5,7 +5,7 @@ import {
   Heart 
 } from 'lucide-react';
 import { steps } from '../../data/content';
-import Button from '../ui/Button';
+import ButtonComponent from '../ui/ButtonComponent';
 
 // Icon mapping for dynamic rendering
 const iconMap = {
@@ -97,9 +97,9 @@ const HowItWorks = () => {
         {/* Bottom Section */}
         <div className="text-center space-y-6">
           {/* Call to Action */}
-          <Button variant="success" size="lg" className="shadow-xl hover:shadow-2xl">
+          <ButtonComponent variant="success" size="lg" className="shadow-xl hover:shadow-2xl">
             Try Althea Free
-          </Button>
+          </ButtonComponent>
           
           {/* Supporting Text */}
           <div className="space-y-2">

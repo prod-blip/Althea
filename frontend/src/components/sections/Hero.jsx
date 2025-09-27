@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, CheckCircle } from 'lucide-react';
 import { headlines } from '../../data/content';
-import Button from '../ui/Button';
+import ButtonComponent from '../ui/ButtonComponent';
 import Badge from '../ui/Badge';
 
 const Hero = () => {
@@ -56,12 +56,12 @@ const Hero = () => {
 
             {/* Call-to-Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button variant="primary" size="lg">
+              <ButtonComponent variant="primary" size="lg">
                 Upload a Report
-              </Button>
-              <Button variant="secondary" size="lg">
+              </ButtonComponent>
+              <ButtonComponent variant="secondary" size="lg">
                 See How It Works
-              </Button>
+              </ButtonComponent>
             </div>
 
             {/* Trust Badges */}

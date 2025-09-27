@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Heart, LogOut, User } from 'lucide-react';
 import { navigation } from '../../data/content';
-import Button from '../ui/Button';
+import ButtonComponent from '../ui/ButtonComponent';
 import SignInModal from '../auth/SignInModal';
 import { useAuth } from '../../context/AuthContext';
 
@@ -46,7 +46,7 @@ const Navigation = () => {
                   <User className="w-4 h-4 text-gray-600" />
                   <span className="text-sm text-gray-700">{user?.name || user?.email}</span>
                 </div>
-                <Button
+                <ButtonComponent
                   size="sm"
                   variant="secondary"
                   onClick={handleLogout}
@@ -54,12 +54,12 @@ const Navigation = () => {
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Logout</span>
-                </Button>
+                </ButtonComponent>
               </div>
             ) : (
-              <Button size="sm" onClick={() => setShowSignInModal(true)}>
+              <ButtonComponent size="sm" onClick={() => setShowSignInModal(true)}>
                 Sign In
-              </Button>
+              </ButtonComponent>
             )}
           </div>
         </div>

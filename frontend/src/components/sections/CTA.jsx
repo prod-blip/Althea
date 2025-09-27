@@ -8,7 +8,7 @@ import {
   CheckCircle,
   Sparkles
 } from 'lucide-react';
-import Button from '../ui/Button';
+import ButtonComponent from '../ui/ButtonComponent';
 
 const CTA = () => {
   return (
@@ -74,9 +74,9 @@ const CTA = () => {
         {/* Call-to-Action Buttons */}
         <div className="space-y-6 mb-8">
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              variant="white" 
-              size="lg" 
+            <ButtonComponent
+              variant="white"
+              size="lg"
               className="group shadow-2xl hover:shadow-3xl"
             >
               <span className="flex items-center space-x-2">
@@ -84,15 +84,15 @@ const CTA = () => {
                 <span>Get Started Free</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </span>
-            </Button>
-            
-            <Button 
-              variant="outline" 
+            </ButtonComponent>
+
+            <ButtonComponent
+              variant="outline"
               size="lg"
               className="shadow-lg hover:shadow-xl"
             >
               View Sample Report
-            </Button>
+            </ButtonComponent>
           </div>
           
           {/* Trust Reinforcement */}
