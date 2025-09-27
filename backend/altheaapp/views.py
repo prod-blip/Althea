@@ -103,8 +103,20 @@ def user_profile(request):
 def analyze_medical_report(request):
     """Analyze medical report using OpenAI"""
     try:
+        # Debug authentication
+        print(f"User authenticated: {request.user.is_authenticated}")
+        print(f"User: {request.user}")
+        print(f"Session key: {request.session.session_key}")
+
         if not request.user.is_authenticated:
-            return Response({'error': 'Authentication required'}, status=401)
+            return Response({
+                'error': 'Authentication required',
+                'debug': {
+                    'user_authenticated': request.user.is_authenticated,
+                    'session_key': request.session.session_key,
+                    'user_id': getattr(request.user, 'id', None)
+                }
+            }, status=401)
 
         # Get the uploaded file data
         file_data = request.data.get('file')

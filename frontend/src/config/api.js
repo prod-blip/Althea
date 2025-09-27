@@ -14,6 +14,7 @@ export const apiRequest = async (endpoint, options = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
 
   const config = {
+    credentials: 'include', // Include cookies for Django session auth
     ...options,
     headers: {
       ...apiConfig.headers,
