@@ -173,41 +173,18 @@ def analyze_medical_report(request):
             print("ERROR: OpenAI API key not configured")
             return Response({'error': 'OpenAI API key not configured'}, status=500)
 
-        # Initialize OpenAI client (v1.x format)
+        # Initialize OpenAI client - simple approach that works locally
         try:
             print(f"OpenAI version: {openai.__version__}")
+            print("Attempting simple OpenAI client initialization...")
 
-            # Clear proxy-related environment variables that might interfere
-            import os
-            proxy_vars = ['HTTP_PROXY', 'HTTPS_PROXY', 'http_proxy', 'https_proxy']
-            for var in proxy_vars:
-                if var in os.environ:
-                    print(f"Found proxy env var {var}: {os.environ[var]}")
-                    del os.environ[var]
-
-            # Try multiple initialization approaches
-            try:
-                # First attempt: explicit parameters only
-                client = openai.OpenAI(
-                    api_key=settings.OPENAI_API_KEY,
-                    base_url="https://api.openai.com/v1"
-                )
-                print("OpenAI client initialized successfully with explicit base_url")
-            except Exception as e1:
-                print(f"First attempt failed: {str(e1)}")
-                try:
-                    # Second attempt: minimal parameters
-                    client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
-                    print("OpenAI client initialized successfully with minimal params")
-                except Exception as e2:
-                    print(f"Second attempt failed: {str(e2)}")
-                    # Third attempt: use environment variable approach
-                    os.environ['OPENAI_API_KEY'] = settings.OPENAI_API_KEY
-                    client = openai.OpenAI()
-                    print("OpenAI client initialized successfully with env var")
+            client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+            print("✅ OpenAI client initialized successfully")
 
         except Exception as e:
-            print(f"ERROR: All OpenAI client initialization attempts failed: {str(e)}")
+            print(f"❌ OpenAI client initialization failed: {str(e)}")
+            import traceback
+            traceback.print_exc()
             return Response({'error': f'OpenAI client initialization failed: {str(e)}'}, status=500)
 
         # Extract text based on file type
@@ -279,10 +256,8 @@ def extract_text_from_pdf(file_content):
 def analyze_image_with_openai(image_content, file_type):
     """Analyze medical report image using OpenAI Vision API"""
     try:
-        # Initialize OpenAI client - use environment variable approach
-        import os
-        os.environ['OPENAI_API_KEY'] = settings.OPENAI_API_KEY
-        client = openai.OpenAI()
+        # Initialize OpenAI client - simple approach
+        client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
 
         # Convert image to base64
         image_base64 = base64.b64encode(image_content).decode('utf-8')
@@ -317,10 +292,8 @@ def analyze_image_with_openai(image_content, file_type):
 def analyze_text_with_openai(medical_text):
     """Analyze extracted medical text using OpenAI"""
     try:
-        # Initialize OpenAI client - use environment variable approach
-        import os
-        os.environ['OPENAI_API_KEY'] = settings.OPENAI_API_KEY
-        client = openai.OpenAI()
+        # Initialize OpenAI client - simple approach
+        client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
 
         system_prompt = """You are a medical AI assistant designed to help patients understand their medical reports.
         Your goal is to transform medical anxiety into empowerment by providing clear, accessible explanations.
