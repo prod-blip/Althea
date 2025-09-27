@@ -170,38 +170,58 @@ def analyze_medical_report(request):
 
         # Check OpenAI API key
         if not settings.OPENAI_API_KEY:
+            print("ERROR: OpenAI API key not configured")
             return Response({'error': 'OpenAI API key not configured'}, status=500)
 
         # Initialize OpenAI client (v1.x format)
-        client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+        try:
+            client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+            print("OpenAI client initialized successfully")
+        except Exception as e:
+            print(f"ERROR: Failed to initialize OpenAI client: {str(e)}")
+            return Response({'error': f'OpenAI client initialization failed: {str(e)}'}, status=500)
 
         # Extract text based on file type
         extracted_text = ""
 
         try:
+            print(f"Processing file type: {file_type}")
+            print(f"File data length: {len(file_data) if file_data else 0}")
+
             # Decode base64 file data
             file_content = base64.b64decode(file_data.split(',')[1] if ',' in file_data else file_data)
+            print(f"Decoded file content length: {len(file_content)}")
 
             if file_type.startswith('image/'):
                 # For images, use OpenAI Vision API
+                print("Processing image file with OpenAI Vision API")
                 extracted_text = analyze_image_with_openai(file_content, file_type)
             elif file_type == 'application/pdf':
                 # Extract text from PDF
+                print("Processing PDF file")
                 extracted_text = extract_text_from_pdf(file_content)
             elif file_type in ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']:
                 # For now, treat as text (you can add python-docx for better support)
                 extracted_text = "Document text extraction not fully implemented for Word docs. Please use PDF or image format."
             else:
+                print(f"Unsupported file format: {file_type}")
                 return Response({'error': 'Unsupported file format'}, status=400)
 
         except Exception as e:
+            print(f"ERROR: File processing error: {str(e)}")
             return Response({'error': f'File processing error: {str(e)}'}, status=400)
 
         if not extracted_text:
             return Response({'error': 'Could not extract text from the document'}, status=400)
 
         # Analyze with OpenAI
-        analysis_result = analyze_text_with_openai(extracted_text)
+        try:
+            print(f"Starting OpenAI analysis with text length: {len(extracted_text)}")
+            analysis_result = analyze_text_with_openai(extracted_text)
+            print("OpenAI analysis completed successfully")
+        except Exception as e:
+            print(f"ERROR: OpenAI analysis failed: {str(e)}")
+            return Response({'error': f'OpenAI analysis failed: {str(e)}'}, status=500)
 
         return Response({
             'success': True,
@@ -210,6 +230,7 @@ def analyze_medical_report(request):
         })
 
     except Exception as e:
+        print(f"ERROR: Unexpected error in analyze_medical_report: {str(e)}")
         return Response({'error': f'Analysis failed: {str(e)}'}, status=500)
 
 def extract_text_from_pdf(file_content):
