@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
-# Force redeploy - trigger backend deployment v3 - OAuth endpoints
+# Force redeploy - v4 - JWT authentication with debugging
 import os
 import sys
 
