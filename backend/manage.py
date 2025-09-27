@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
-# Force redeploy - trigger backend deployment
+# Force redeploy - trigger backend deployment v2
 import os
 import sys
 
