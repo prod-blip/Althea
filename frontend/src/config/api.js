@@ -26,12 +26,15 @@ export const apiRequest = async (endpoint, options = {}) => {
     console.log('Access token preview:', tokens.access.substring(0, 50) + '...');
   }
 
+  // Don't send auth token for authentication endpoints
+  const isAuthEndpoint = endpoint.includes('/auth/') || endpoint.includes('/test-auth/');
+
   const config = {
     credentials: 'include', // Include cookies for Django session auth
     ...options,
     headers: {
       ...apiConfig.headers,
-      ...(tokens?.access && { Authorization: `Bearer ${tokens.access}` }),
+      ...(!isAuthEndpoint && tokens?.access && { Authorization: `Bearer ${tokens.access}` }),
       ...options.headers,
     },
   };
