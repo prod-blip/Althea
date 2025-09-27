@@ -13,11 +13,16 @@ export const apiConfig = {
 export const apiRequest = async (endpoint, options = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
 
+  // Get tokens from localStorage
+  const savedTokens = localStorage.getItem('authTokens');
+  const tokens = savedTokens ? JSON.parse(savedTokens) : null;
+
   const config = {
     credentials: 'include', // Include cookies for Django session auth
     ...options,
     headers: {
       ...apiConfig.headers,
+      ...(tokens?.access && { Authorization: `Bearer ${tokens.access}` }),
       ...options.headers,
     },
   };

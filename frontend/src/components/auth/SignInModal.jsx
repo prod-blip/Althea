@@ -57,7 +57,7 @@ const SignInModal = ({ isOpen, onClose, onSuccess }) => {
       });
 
       if (result.success) {
-        onSuccess(result.user);
+        onSuccess(result); // Pass the full response including tokens
         onClose();
       } else {
         setError(result.error || 'Authentication failed');

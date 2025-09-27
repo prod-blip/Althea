@@ -15,6 +15,10 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [tokens, setTokens] = useState(() => {
+    const savedTokens = localStorage.getItem('authTokens');
+    return savedTokens ? JSON.parse(savedTokens) : null;
+  });
 
   // Check if user is already authenticated on app load
   useEffect(() => {
@@ -35,9 +39,14 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = (userData) => {
+  const login = (userData, authTokens = null) => {
     setUser(userData);
     setIsAuthenticated(true);
+
+    if (authTokens) {
+      setTokens(authTokens);
+      localStorage.setItem('authTokens', JSON.stringify(authTokens));
+    }
   };
 
   const logout = async () => {
@@ -48,6 +57,8 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setUser(null);
       setIsAuthenticated(false);
+      setTokens(null);
+      localStorage.removeItem('authTokens');
     }
   };
 
@@ -55,6 +66,7 @@ export const AuthProvider = ({ children }) => {
     user,
     isAuthenticated,
     isLoading,
+    tokens,
     login,
     logout,
     checkAuthStatus

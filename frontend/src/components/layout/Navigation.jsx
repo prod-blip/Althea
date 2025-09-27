@@ -9,9 +9,9 @@ const Navigation = () => {
   const { user, isAuthenticated, logout, login } = useAuth();
   const [showSignInModal, setShowSignInModal] = useState(false);
 
-  const handleSignInSuccess = (userData) => {
-    console.log('User signed in:', userData);
-    login(userData); // Update AuthContext with user data
+  const handleSignInSuccess = (authResponse) => {
+    console.log('User signed in:', authResponse);
+    login(authResponse.user, authResponse.tokens); // Update AuthContext with user data and tokens
     setShowSignInModal(false);
   };
 

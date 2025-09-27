@@ -14,6 +14,7 @@ import openai
 from PIL import Image
 import io
 import PyPDF2
+from rest_framework_simplejwt.tokens import RefreshToken
 
 # Create your views here.
 
@@ -60,6 +61,11 @@ def google_auth(request):
             # Log the user in
             login(request, user)
 
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(user)
+            access_token = str(refresh.access_token)
+            refresh_token = str(refresh)
+
             return Response({
                 'success': True,
                 'user': {
@@ -67,6 +73,10 @@ def google_auth(request):
                     'email': user.email,
                     'name': f"{user.first_name} {user.last_name}".strip(),
                     'is_new_user': created
+                },
+                'tokens': {
+                    'access': access_token,
+                    'refresh': refresh_token
                 },
                 'message': 'Successfully authenticated with Google'
             })
