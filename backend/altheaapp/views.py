@@ -146,10 +146,12 @@ def analyze_medical_report(request):
         if not file_data:
             return Response({'error': 'No file data provided'}, status=400)
 
-        # Initialize OpenAI client
-        openai.api_key = settings.OPENAI_API_KEY
-        if not openai.api_key:
+        # Check OpenAI API key
+        if not settings.OPENAI_API_KEY:
             return Response({'error': 'OpenAI API key not configured'}, status=500)
+
+        # Initialize OpenAI client (v1.x format)
+        client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
 
         # Extract text based on file type
         extracted_text = ""
@@ -205,10 +207,13 @@ def extract_text_from_pdf(file_content):
 def analyze_image_with_openai(image_content, file_type):
     """Analyze medical report image using OpenAI Vision API"""
     try:
+        # Initialize OpenAI client
+        client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+
         # Convert image to base64
         image_base64 = base64.b64encode(image_content).decode('utf-8')
 
-        response = openai.chat.completions.create(
+        response = client.chat.completions.create(
             model="gpt-4o",
             messages=[
                 {
@@ -238,6 +243,9 @@ def analyze_image_with_openai(image_content, file_type):
 def analyze_text_with_openai(medical_text):
     """Analyze extracted medical text using OpenAI"""
     try:
+        # Initialize OpenAI client
+        client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+
         system_prompt = """You are a medical AI assistant designed to help patients understand their medical reports.
         Your goal is to transform medical anxiety into empowerment by providing clear, accessible explanations.
 
@@ -259,7 +267,7 @@ def analyze_text_with_openai(medical_text):
         - reassurance: string (optional reassuring message)
         """
 
-        response = openai.chat.completions.create(
+        response = client.chat.completions.create(
             model="gpt-4o",
             messages=[
                 {"role": "system", "content": system_prompt},
