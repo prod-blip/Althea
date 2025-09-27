@@ -1,33 +1,20 @@
-import React from 'react';
-import { Heart } from 'lucide-react';
+import React, { useState } from 'react';
+import { Heart, LogOut, User } from 'lucide-react';
 import { navigation } from '../../data/content';
 import Button from '../ui/Button';
-import { apiRequest } from '../../config/api';
+import SignInModal from '../auth/SignInModal';
+import { useAuth } from '../../context/AuthContext';
 
 const Navigation = () => {
-  const handleSignIn = async () => {
-    try {
-      console.log('Testing API connection...');
+  const { user, isAuthenticated, logout } = useAuth();
+  const [showSignInModal, setShowSignInModal] = useState(false);
 
-      // Test health endpoint
-      const healthResponse = await apiRequest('/api/health/');
-      console.log('Health check response:', healthResponse);
+  const handleSignInSuccess = (userData) => {
+    console.log('User signed in:', userData);
+  };
 
-      // Test auth endpoint
-      const authResponse = await apiRequest('/api/auth/test/', {
-        method: 'POST',
-        body: JSON.stringify({
-          test: true,
-          timestamp: new Date().toISOString()
-        })
-      });
-      console.log('Auth test response:', authResponse);
-
-      alert('Backend connection successful! Check console for details.');
-    } catch (error) {
-      console.error('API connection failed:', error);
-      alert(`Backend connection failed: ${error.message}`);
-    }
+  const handleLogout = async () => {
+    await logout();
   };
 
   return (
@@ -53,12 +40,37 @@ const Navigation = () => {
                 {link.text}
               </a>
             ))}
-            <Button size="sm" onClick={handleSignIn}>
-              Sign In
-            </Button>
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <User className="w-4 h-4 text-gray-600" />
+                  <span className="text-sm text-gray-700">{user?.name || user?.email}</span>
+                </div>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={handleLogout}
+                  className="flex items-center space-x-1"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Logout</span>
+                </Button>
+              </div>
+            ) : (
+              <Button size="sm" onClick={() => setShowSignInModal(true)}>
+                Sign In
+              </Button>
+            )}
           </div>
         </div>
       </div>
+
+      {/* Sign In Modal */}
+      <SignInModal
+        isOpen={showSignInModal}
+        onClose={() => setShowSignInModal(false)}
+        onSuccess={handleSignInSuccess}
+      />
     </nav>
   );
 };
