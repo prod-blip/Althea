@@ -11,6 +11,7 @@ const Navigation = () => {
 
   const handleSignInSuccess = (userData) => {
     console.log('User signed in:', userData);
+    setShowSignInModal(false);
   };
 
   const handleLogout = async () => {
