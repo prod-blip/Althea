@@ -175,10 +175,18 @@ def analyze_medical_report(request):
 
         # Initialize OpenAI client (v1.x format)
         try:
-            client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+            # Clear any global openai configuration that might cause issues
+            import importlib
+            importlib.reload(openai)
+
+            # Only pass the API key, no other parameters
+            client = openai.OpenAI(
+                api_key=settings.OPENAI_API_KEY
+            )
             print("OpenAI client initialized successfully")
         except Exception as e:
             print(f"ERROR: Failed to initialize OpenAI client: {str(e)}")
+            print(f"OpenAI version: {openai.__version__}")
             return Response({'error': f'OpenAI client initialization failed: {str(e)}'}, status=500)
 
         # Extract text based on file type
