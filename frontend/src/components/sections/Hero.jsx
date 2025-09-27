@@ -24,17 +24,17 @@ const Hero = () => {
           <div className="space-y-8">
             {/* Headline Switcher */}
             <div className="flex flex-wrap gap-2 mb-4">
-              {headlines.map((_, index) => (
+              {headlines.map((headline, index) => (
                 <button
                   key={index}
                   onClick={() => setActiveHeadline(index)}
                   className={`px-3 py-1 text-xs rounded-full transition-all duration-300 ${
-                    activeHeadline === index 
-                      ? 'bg-blue-600 text-white shadow-md scale-105' 
+                    activeHeadline === index
+                      ? 'bg-blue-600 text-white shadow-md scale-105'
                       : 'bg-gray-200 text-gray-600 hover:bg-gray-300 hover:scale-105'
                   }`}
                 >
-                  Option {index + 1}
+                  {headline.type}
                 </button>
               ))}
             </div>
