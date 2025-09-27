@@ -1,33 +1,64 @@
 import React, { useState } from 'react';
-import { User, FileText, Upload, Brain, Heart, LogOut, Settings } from 'lucide-react';
+import { User, FileText, Upload, Brain, Heart, LogOut, Settings, AlertTriangle, CheckCircle, HelpCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import FileUpload from './FileUpload';
 import ButtonComponent from '../ui/ButtonComponent';
+import { apiRequest } from '../../config/api';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const [uploadedFile, setUploadedFile] = useState(null);
   const [analysisResult, setAnalysisResult] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisError, setAnalysisError] = useState('');
 
   const handleFileUpload = (file) => {
     setUploadedFile(file);
     setAnalysisResult(null);
+    setAnalysisError('');
   };
 
   const handleAnalyze = async () => {
     if (!uploadedFile) return;
 
     setIsAnalyzing(true);
-    // TODO: Implement OpenAI analysis
-    setTimeout(() => {
-      setAnalysisResult({
-        summary: "Sample analysis result - this will be replaced with OpenAI integration",
-        keyFindings: ["Finding 1", "Finding 2", "Finding 3"],
-        questionsForDoctor: ["Question 1", "Question 2", "Question 3"]
+    setAnalysisError('');
+
+    try {
+      // Convert file to base64
+      const base64File = await fileToBase64(uploadedFile);
+
+      // Send to OpenAI analysis endpoint
+      const response = await apiRequest('/api/analyze/', {
+        method: 'POST',
+        body: JSON.stringify({
+          file: base64File,
+          file_type: uploadedFile.type,
+          file_name: uploadedFile.name
+        })
       });
+
+      if (response.success) {
+        setAnalysisResult(response.analysis);
+      } else {
+        setAnalysisError(response.error || 'Analysis failed');
+      }
+
+    } catch (error) {
+      console.error('Analysis error:', error);
+      setAnalysisError('Failed to analyze report. Please try again.');
+    } finally {
       setIsAnalyzing(false);
-    }, 2000);
+    }
+  };
+
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
   };
 
   const handleLogout = async () => {
@@ -177,40 +208,118 @@ const Dashboard = () => {
               </div>
             )}
 
+            {analysisError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3">
+                <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-red-800 font-medium">Analysis Error</p>
+                  <p className="text-red-600 text-sm">{analysisError}</p>
+                </div>
+              </div>
+            )}
+
             {analysisResult && (
               <div className="space-y-6">
+                {/* Urgent Concerns */}
+                {analysisResult.urgent_concerns && analysisResult.urgent_concerns.length > 0 && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <div className="flex items-start space-x-3">
+                      <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <h3 className="font-semibold text-red-900 mb-2">⚠️ Urgent Concerns</h3>
+                        <ul className="space-y-1">
+                          {analysisResult.urgent_concerns.map((concern, index) => (
+                            <li key={index} className="text-red-800 text-sm">• {concern}</li>
+                          ))}
+                        </ul>
+                        <p className="text-red-700 text-sm mt-2 font-medium">
+                          Please contact your healthcare provider immediately.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Summary */}
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Summary</h3>
-                  <p className="text-gray-700 bg-blue-50 p-4 rounded-lg">
+                  <h3 className="font-semibold text-gray-900 mb-2 flex items-center space-x-2">
+                    <FileText className="w-5 h-5 text-blue-600" />
+                    <span>Summary</span>
+                  </h3>
+                  <p className="text-gray-700 bg-blue-50 p-4 rounded-lg leading-relaxed">
                     {analysisResult.summary}
                   </p>
                 </div>
 
                 {/* Key Findings */}
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Key Findings</h3>
-                  <ul className="space-y-2">
-                    {analysisResult.keyFindings.map((finding, index) => (
-                      <li key={index} className="flex items-start space-x-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                        <span className="text-gray-700">{finding}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                {analysisResult.key_findings && analysisResult.key_findings.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-2 flex items-center space-x-2">
+                      <CheckCircle className="w-5 h-5 text-green-600" />
+                      <span>Key Findings</span>
+                    </h3>
+                    <ul className="space-y-2">
+                      {analysisResult.key_findings.map((finding, index) => (
+                        <li key={index} className="flex items-start space-x-2">
+                          <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <span className="text-gray-700">{finding}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
                 {/* Questions for Doctor */}
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Questions to Ask Your Doctor</h3>
-                  <ul className="space-y-2">
-                    {analysisResult.questionsForDoctor.map((question, index) => (
-                      <li key={index} className="flex items-start space-x-2">
-                        <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
-                        <span className="text-gray-700">{question}</span>
-                      </li>
-                    ))}
-                  </ul>
+                {analysisResult.questions_for_doctor && analysisResult.questions_for_doctor.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-2 flex items-center space-x-2">
+                      <HelpCircle className="w-5 h-5 text-purple-600" />
+                      <span>Questions to Ask Your Doctor</span>
+                    </h3>
+                    <ul className="space-y-2">
+                      {analysisResult.questions_for_doctor.map((question, index) => (
+                        <li key={index} className="flex items-start space-x-2">
+                          <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <span className="text-gray-700">{question}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Reassurance */}
+                {analysisResult.reassurance && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <div className="flex items-start space-x-3">
+                      <Heart className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <h3 className="font-semibold text-green-900 mb-1">💚 Reassurance</h3>
+                        <p className="text-green-800 text-sm">{analysisResult.reassurance}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Action Buttons */}
+                <div className="flex space-x-3 pt-4 border-t border-gray-200">
+                  <ButtonComponent
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => {
+                      setUploadedFile(null);
+                      setAnalysisResult(null);
+                      setAnalysisError('');
+                    }}
+                  >
+                    Analyze Another Report
+                  </ButtonComponent>
+                  <ButtonComponent
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => window.print()}
+                  >
+                    Print Results
+                  </ButtonComponent>
                 </div>
               </div>
             )}

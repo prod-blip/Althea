@@ -24,4 +24,5 @@ urlpatterns = [
     path('api/auth/google/', views.google_auth, name='google_auth'),
     path('api/auth/logout/', views.logout_user, name='logout'),
     path('api/user/profile/', views.user_profile, name='user_profile'),
+    path('api/analyze/', views.analyze_medical_report, name='analyze_report'),
 ]
