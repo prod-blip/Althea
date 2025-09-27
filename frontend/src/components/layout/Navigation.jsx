@@ -6,11 +6,12 @@ import SignInModal from '../auth/SignInModal';
 import { useAuth } from '../../context/AuthContext';
 
 const Navigation = () => {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout, login } = useAuth();
   const [showSignInModal, setShowSignInModal] = useState(false);
 
   const handleSignInSuccess = (userData) => {
     console.log('User signed in:', userData);
+    login(userData); // Update AuthContext with user data
     setShowSignInModal(false);
   };
 
