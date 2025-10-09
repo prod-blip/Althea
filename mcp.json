@@ -1,0 +1,14 @@
+// ...existing code...
+{
+  "mcpServers": [
+    {
+      "name": "supabase-mcp",
+      "type": "supabase",
+      "url": "https://your-project-ref.supabase.co",
+      "serviceKeyEnv": "SUPABASE_SERVICE_KEY",
+      "edgeFunction": "mcp-server",
+      "timeoutMs": 30000
+    }
+  ]
+}
+// ...existing code...

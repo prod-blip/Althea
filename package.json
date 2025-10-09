@@ -1,0 +1,21 @@
+{
+  "name": "althea-monorepo-helper",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "concurrently \"npm:dev:frontend\" \"npm:dev:supabase\"",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:supabase": "supabase functions serve mcp-server --env-file .env",
+    "install:frontend": "npm --prefix frontend install",
+    "start:backend": "echo \"This is a Django backend. Use 'python manage.py runserver' from the backend folder.\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "supabase": "^2.48.3"
+  },
+  "description": "Helper package.json so `npm run dev` works from repo root. Frontend is in ./frontend, backend is Django.",
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  }
+}
