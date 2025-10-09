@@ -1,0 +1,10 @@
+{
+  "name": "althea-backend-helper",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "powershell -NoProfile -Command \"Write-Host 'This is a Django backend. Run: python manage.py runserver from the backend folder'\""
+  },
+  "description": "Small helper so `npm run dev` doesn't error in the backend folder. Backend is Django (manage.py).",
+  "license": "MIT"
+}
